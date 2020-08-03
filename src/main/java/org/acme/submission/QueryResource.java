@@ -6,6 +6,7 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.ws.rs.GET;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Path("/query")
+@ApplicationScoped
 public class QueryResource {
 
     private final Logger log = LoggerFactory.getLogger(QueryResource.class);

@@ -40,4 +40,23 @@ public class Aggregation extends PanacheEntityBase {
     @Entity(name = "AVERAGES_TRIP_5")
     public static class AvgTrip5 extends Aggregation {
     }
+
+    public Aggregation() {
+    }
+
+    @Override
+    public String toString() {
+        return "Aggregation{" +
+                "key='" + key + '\'' +
+                ", count=" + count +
+                ", capacityMin=" + capacityMin +
+                ", capacityMax=" + capacityMax +
+                ", capacitySum=" + capacitySum +
+                ", capacityAvg=" + capacityAvg +
+                ", vibeMin=" + vibeMin +
+                ", vibeMax=" + vibeMax +
+                ", vibeSum=" + vibeSum +
+                ", vibeAvg=" + vibeAvg +
+                '}';
+    }
 }
