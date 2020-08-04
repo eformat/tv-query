@@ -1,0 +1,147 @@
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: tv-query
+    app.kubernetes.io/component: tv-query
+    app.kubernetes.io/instance: tv-query
+  name: tv-query
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations:
+      openshift.io/imported-from: quay.io/eformat/tv-query:latest
+    from:
+      kind: DockerImage
+      name: quay.io/eformat/tv-query:latest
+    generation: 5
+    importPolicy: {}
+    name: latest
+    referencePolicy:
+      type: Source
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tv-query
+    app.kubernetes.io/component: tv-query
+    app.kubernetes.io/instance: tv-query
+  name: tv-query
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    deploymentconfig: tv-query
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: tv-query
+    app.kubernetes.io/component: tv-query
+    app.kubernetes.io/instance: tv-query
+  name: tv-query
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    deploymentconfig: tv-query
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        deploymentconfig: tv-query
+    spec:
+      containers:
+      - env:
+        - name: APIKEY
+          valueFrom:
+            secretKeyRef:
+              key: APIKEY
+              name: sc-routes
+        - name: DEVID
+          valueFrom:
+            secretKeyRef:
+              key: DEVID
+              name: sc-routes
+        - name: INFINISPAN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: INFINISPAN_PASSWORD
+              name: sc-routes
+        - name: INFINISPAN_REALM
+          valueFrom:
+            secretKeyRef:
+              key: INFINISPAN_REALM
+              name: sc-routes
+        - name: INFINISPAN_USER
+          valueFrom:
+            secretKeyRef:
+              key: INFINISPAN_USER
+              name: sc-routes
+        - name: QUARKUS_PROFILE
+          value: prod
+        image: ' '
+        imagePullPolicy: Always
+        name: tv-query
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - tv-query
+      from:
+        kind: ImageStreamTag
+        name: tv-query:latest
+        namespace: tripvibe
+      lastTriggeredImage: quay.io/eformat/tv-query:latest
+    type: ImageChange
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: tv-query
+    app.kubernetes.io/component: tv-query
+    app.kubernetes.io/instance: tv-query
+  name: tv-query
+spec:
+  port:
+    targetPort: 8080-tcp
+  to:
+    kind: Service
+    name: tv-query
+    weight: 100
+  wildcardPolicy: None
