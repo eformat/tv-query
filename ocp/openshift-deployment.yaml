@@ -125,7 +125,6 @@ spec:
       from:
         kind: ImageStreamTag
         name: tv-query:latest
-        namespace: tripvibe
       lastTriggeredImage: quay.io/eformat/tv-query:latest
     type: ImageChange
 ---
