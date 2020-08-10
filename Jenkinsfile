@@ -144,7 +144,7 @@ pipeline {
                        oc -n ${TARGET_NAMESPACE} get dc ${APP_NAME} || rc=$?
                        if [ $rc -eq 1 ]; then
                             echo " 🏗 no deployment found - creating 🏗"
-                            oc -n ${TARGET_NAMESPACE} create -f ocp/openshift-deployment.yml
+                            oc -n ${TARGET_NAMESPACE} create -f ocp/openshift-deployment.yaml
                        fi
                        echo " 🏗 found pod waiting for deployment 🏗"                       
                        oc -n ${TARGET_NAMESPACE} wait dc -l app=${APP_NAME} --for=condition=Available --timeout=300s                        
