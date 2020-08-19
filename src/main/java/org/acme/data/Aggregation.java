@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import java.sql.Date;
 import java.time.Instant;
 
 @Entity(name = "AVERAGES")
@@ -15,7 +16,7 @@ public class Aggregation extends PanacheEntityBase {
     @Id
     public String key;
     public int count;
-    public Instant instant;
+    public String instant;
 
     public double capacityMin;
     public double capacityMax;
