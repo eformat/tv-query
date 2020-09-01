@@ -138,11 +138,11 @@ public class QueryResource {
             hidden = false)
     public Publisher<Aggregation> getAvgRouteStream(@PathParam int minutes) {
         Multi<Long> ticks = Multi.createFrom().ticks().every(Duration.ofSeconds(3)).onOverflow().drop();
-        return ticks.on().subscribed(subscription -> log.info("We are subscribed!"))
+        return ticks.on().request(subscription -> log.info("We are subscribed!"))
                 .on().cancellation(() -> log.info("Downstream has cancelled the interaction"))
                 .onFailure().invoke(failure -> log.warn("Failed with " + failure.getMessage()))
                 .onCompletion().invoke(() -> log.info("Completed"))
-                .onItem().produceMulti(
+                .onItem().transformToMulti(
                         x -> avgRouteMulti(minutes)
                 ).merge();
     }
@@ -164,11 +164,11 @@ public class QueryResource {
             hidden = false)
     public Publisher<Aggregation> getAvgRouteIdStream(@PathParam int minutes, @PathParam String key) {
         Multi<Long> ticks = Multi.createFrom().ticks().every(Duration.ofSeconds(3)).onOverflow().drop();
-        return ticks.on().subscribed(subscription -> log.info("We are subscribed!"))
+        return ticks.on().request(subscription -> log.info("We are subscribed!"))
                 .on().cancellation(() -> log.info("Downstream has cancelled the interaction"))
                 .onFailure().invoke(failure -> log.warn("Failed with " + failure.getMessage()))
                 .onCompletion().invoke(() -> log.info("Completed"))
-                .onItem().produceMulti(
+                .onItem().transformToMulti(
                         x -> avgRouteMultiId(minutes, key)
                 ).merge();
     }
@@ -190,11 +190,11 @@ public class QueryResource {
             hidden = false)
     public Publisher<Aggregation> getAvgTripStream(@PathParam int minutes) {
         Multi<Long> ticks = Multi.createFrom().ticks().every(Duration.ofSeconds(3)).onOverflow().drop();
-        return ticks.on().subscribed(subscription -> log.info("We are subscribed!"))
+        return ticks.on().request(subscription -> log.info("We are subscribed!"))
                 .on().cancellation(() -> log.info("Downstream has cancelled the interaction"))
                 .onFailure().invoke(failure -> log.warn("Failed with " + failure.getMessage()))
                 .onCompletion().invoke(() -> log.info("Completed"))
-                .onItem().produceMulti(
+                .onItem().transformToMulti(
                         x -> avgTripMulti(minutes)
                 ).merge();
     }
@@ -216,11 +216,11 @@ public class QueryResource {
             hidden = false)
     public Publisher<Aggregation> getAvgTripIdStream(@PathParam int minutes, @PathParam String key) {
         Multi<Long> ticks = Multi.createFrom().ticks().every(Duration.ofSeconds(3)).onOverflow().drop();
-        return ticks.on().subscribed(subscription -> log.info("We are subscribed!"))
+        return ticks.on().request(subscription -> log.info("We are subscribed!"))
                 .on().cancellation(() -> log.info("Downstream has cancelled the interaction"))
                 .onFailure().invoke(failure -> log.warn("Failed with " + failure.getMessage()))
                 .onCompletion().invoke(() -> log.info("Completed"))
-                .onItem().produceMulti(
+                .onItem().transformToMulti(
                         x -> avgTripIdMulti(minutes, key)
                 ).merge();
     }
